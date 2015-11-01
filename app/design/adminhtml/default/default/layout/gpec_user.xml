@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<layout>
+
+    <!--
+    Job Admin Panel
+    -->
+    <adminhtml_permissions_user_edit>
+        <reference name="head">
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+            </action>
+            <action method="addCss">
+                <name>lib/prototype/windows/themes/magento.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>gpec_user.css</name>
+            </action>
+        </reference>
+    </adminhtml_permissions_user_edit>
+
+
+</layout>

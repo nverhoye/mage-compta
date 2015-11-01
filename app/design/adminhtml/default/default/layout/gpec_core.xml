@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<layout>
+    <adminhtml_gpec_index_index>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <name>lib/jquery/jquery-1.10.2.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>lib/jquery/noconflict.js</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>lib/jquery/rating.js</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>lib/jquery/tip.js</name>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-1to10.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-horizontal.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-movie.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-pill.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-reversed.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bars-square.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/bootstrap-stars.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/css-stars.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>rating/fontawesome-stars.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="gpec_core/adminhtml_search" name="gpec_search" template="gpec_core/search.phtml"/>
+        </reference>
+    </adminhtml_gpec_index_index>
+
+    <adminhtml_gpec_index_get>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_core/adminhtml_search" name="result" template="gpec_core/result.phtml"/>
+        </block>
+    </adminhtml_gpec_index_get>
+</layout>

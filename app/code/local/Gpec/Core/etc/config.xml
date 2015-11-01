@@ -1,0 +1,39 @@
+<config>
+    <modules>
+        <Gpec_Core>
+            <version>0.1.0</version>
+        </Gpec_Core>
+    </modules>
+    <global>
+        <helpers>
+            <gpec_core>
+                <class>Gpec_Core_Helper</class>
+            </gpec_core>
+        </helpers>
+        <blocks>
+            <gpec_core>
+                <class>Gpec_Core_Block</class>
+            </gpec_core>
+        </blocks>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <gpec_core>
+                    <file>gpec_core.xml</file>
+                </gpec_core>
+            </updates>
+        </layout>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <gpec_core before="Mage_Adminhtml">Gpec_Core_Adminhtml</gpec_core>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

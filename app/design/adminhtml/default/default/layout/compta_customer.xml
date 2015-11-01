@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<layout>
+
+	<!--
+	Job Admin Panel
+	-->
+	
+	<adminhtml_customer_index_index>
+		<reference name="content">
+			<block type="compta_customer/adminhtml_customer" name="customer"/>
+		</reference>
+	</adminhtml_customer_index_index>
+
+	<adminhtml_customer_index_new>
+		<update handle="adminhtml_customer_customer_edit" />
+	</adminhtml_customer_index_new>
+
+	<adminhtml_customer_index_edit>
+		<reference name="content">
+			<block type="compta_customer/adminhtml_customer_edit" name="customer_edit"></block>
+		</reference>
+        <reference name="left">
+            <block type="compta_customer/adminhtml_customer_edit_tabs" name="customer_edit_tabs"/>
+        </reference>
+	</adminhtml_customer_index_edit>
+
+    <adminhtml_customer_index_skill>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="compta_customer/adminhtml_customer_edit_tab_skill" name="skill.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>skill.grid</grid_block_name>
+                        <data_callback>getSelectedSkill</data_callback>
+                        <hidden_input_name>links[skill]</hidden_input_name>
+                        <reload_param_name>skill_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_customer_index_skill>
+
+    <adminhtml_customer_index_skillgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="compta_customer/adminhtml_customer_edit_tab_skill" name="skill.grid"/>
+        </block>
+    </adminhtml_customer_index_skillgrid>
+
+
+    <adminhtml_permissions_user_edp>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_edp" name="edp.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>edp.grid</grid_block_name>
+                        <data_callback>getSelectedEdp</data_callback>
+                        <hidden_input_name>links[edp]</hidden_input_name>
+                        <reload_param_name>edp_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_permissions_user_edp>
+
+    <adminhtml_permissions_user_edpgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_edp" name="edp.grid"/>
+        </block>
+    </adminhtml_permissions_user_edpgrid>
+
+    <adminhtml_permissions_user_suivi>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_suivi" name="suivi.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>suivi.grid</grid_block_name>
+                        <data_callback>getSelectedSuivi</data_callback>
+                        <hidden_input_name>links[suivi]</hidden_input_name>
+                        <reload_param_name>suivi_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_permissions_user_suivi>
+
+    <adminhtml_permissions_user_suivigrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_suivi" name="suivi.grid"/>
+        </block>
+    </adminhtml_permissions_user_suivigrid>
+	
+</layout>

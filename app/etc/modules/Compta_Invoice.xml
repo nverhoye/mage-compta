@@ -1,0 +1,8 @@
+<config>
+  <modules>
+    <Compta_Invoice>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Compta_Invoice>
+  </modules>
+</config>

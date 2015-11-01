@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <gpec_job translate="title" module="gpec_job">
+            <title>Postes</title>
+            <sort_order>20</sort_order>
+            <action>adminhtml/job_index</action>
+        </gpec_job>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <gpec_job translate="title" module="gpec_job">
+                        <title>Poste</title>
+                        <sort_order>300</sort_order>
+                    </gpec_job>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

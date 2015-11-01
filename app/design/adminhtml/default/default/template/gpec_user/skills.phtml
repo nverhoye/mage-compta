@@ -1,0 +1,103 @@
+<?php
+$_htmlId = $this->getElement()->getHtmlId();
+$_htmlClass = $this->getElement()->getClass();
+$_htmlName = 'posted_skills';
+$_readonly = $this->getElement()->getReadonly();
+
+$lastSkills = Mage::getResourceModel('admin/user')->getLastSkills(Mage::registry('permissions_user'));
+$skills = $this->helper('core')->jsonDecode($lastSkills['skills']);
+if(is_null($skills)) {
+    $skills = array();
+}
+$_counter = 0;
+?>
+<tr>
+    <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
+    <td colspan="10" class="grid hours">
+        <table id="attribute-options-table" class="dynamic-grid" cellspacing="0"
+               cellpadding="0">
+            <tbody>
+            <tr>
+                <th class="name"><?php echo $this->__('Nom') ?></th>
+                <th><?php echo $this->__('Note') ?></th>
+                <th><?php echo $this->__('Commentaire') ?></th>
+                <th>
+                    <?php if ($this->helper('gpec_user')->isAdminRh()): ?>
+
+                    <button id="add_new_option_button" title="Add Option" type="button" class="scalable add">
+                        <span><span><span><?php echo $this->__('Ajouter') ?></span></span></span></button>
+                    <?php endif; ?>
+                </th>
+            </tr>
+            <?php foreach ($skills as $skillId => $skillData): ?>
+                <tr class="option-row" id="skill-row-<?php echo $skillId ?>">
+                    <td class="name"><?php echo Mage::getModel('gpec_skill/skill')->load($skillId)->getFullName(); ?></td>
+                    <td class="note"><select <?php if (!$this->helper('gpec_user')->isAdminRh()): ?>disabled="disabled"<?php endif; ?> name="<?php echo $_htmlName; ?>[<?php echo $skillId; ?>][note]">
+                            <option <?php if($skillData['note'] == '1'): ?>selected<?php endif; ?> value="1">1</option>
+                            <option <?php if($skillData['note'] == '2'): ?>selected<?php endif; ?> value="2">2</option>
+                            <option <?php if($skillData['note'] == '3'): ?>selected<?php endif; ?> value="3">3</option>
+                            <option <?php if($skillData['note'] == '4'): ?>selected<?php endif; ?> value="4">4</option>
+                            <option <?php if($skillData['note'] == '5'): ?>selected<?php endif; ?> value="5">5</option>
+                        </select></td>
+                    <td class="comment"><input <?php if (!$this->helper('gpec_user')->isAdminRh()): ?>disabled="disabled"<?php endif; ?> name="<?php echo $_htmlName; ?>[<?php echo $skillId; ?>][comment]"
+                               value="<?php echo $skillData['comment']; ?>" class="input-text" type="text"></td>
+                    <td class="a-left" id="delete_button_container_option_<?php echo $_counter ?>'">
+                        <?php if ($this->helper('gpec_user')->isAdminRh()): ?>
+                        <input id="delete-row-<?php echo $_counter ?>" type="hidden" class="delete-flag"/>
+                        <button
+                            onclick="$('hour-row-<?php echo $_counter ?>').style.display='none'; $('delete-row-<?php echo $_counter ?>').setValue(1);"
+                            title="Delete" type="button" class="scalable delete delete-option">
+                            <span><span><span>Delete</span></span></span></button>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php
+                $_counter++;
+            endforeach;
+            ?>
+            </tbody>
+        </table>
+
+        <script type="text/javascript">//<![CDATA[
+
+            $('add_new_option_button').observe('click', function () {
+                openMyPopup();
+            });
+
+            function openMyPopup() {
+
+                var url = '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/skill_index/manage', array('job_id' =>  Mage::getModel('gpec_job/user')->getJobId(Mage::registry('permissions_user')))) ?>';
+
+                if ($('browser_window') && typeof(Windows) != 'undefined') {
+                    Windows.focus('browser_window');
+                    return;
+                }
+                var dialogWindow = Dialog.info(null, {
+                    closable:true,
+                    resizable:false,
+                    draggable:true,
+                    className:'magento',
+                    windowClassName:'popup-window',
+                    title:'Ajouter une nouvelle compétence',
+                    top:50,
+                    width:550,
+                    height:200,
+                    zIndex:1000,
+                    recenterAuto:true,
+                    hideEffect:Element.hide,
+                    showEffect:Element.show,
+                    id:'browser_window',
+                    url:url,
+                    onClose:function (param, el) {
+                       // alert('onClose');
+                    }
+                });
+            }
+
+            function closePopup() {
+                Windows.close('browser_window');
+            }
+
+            //]]></script>
+    </td>
+</tr>

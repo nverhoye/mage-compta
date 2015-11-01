@@ -1,0 +1,145 @@
+<div class="form">
+    <p style="font-size:14px">Rechercher un nom, un poste, une compétence ou des formations :</p>
+
+    <form onkeypress="return event.keyCode != 13;">
+        <input autocomplete="off" type="text" name="q" id="input_query" style="padding:8px; width:400px"/>
+        <button title="Add New User" style="padding: 7px 9px" type="button" class="scalable"
+                style=""><span><span><span>Rechercher</span></span></span></button>
+    </form>
+</div>
+
+<div class="content" id="content_search">
+
+</div>
+<style>
+    .highlight {
+        background-color: #ffff00
+    }
+
+    #demo .bar-rating a {
+        background: url('../img/star.png');
+        width: 24px;
+        height: 24px;
+        display: block;
+        float: left;
+    }
+
+    #demo .bar-rating a:hover,
+    #demo .bar-rating a.active,
+    #demo .bar-rating a.selected {
+        background-position: 0 24px;
+    }
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5),
+    (min-resolution: 192dpi) {
+        #demo .bar-rating a {
+            background: url('../img/star@2x.png');
+            background-size: 24px 48px;
+        }
+    }
+
+    .tooltip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        display: none;
+    }
+    .tooltip.active{
+        background:#E3E3E3;
+        padding:5px;
+        margin:5px;
+    }
+
+    a.tool {
+        border-bottom: 1px dotted #6699CC;
+        cursor: help;
+        text-decoration:none;
+        color: #2f2f2f;
+    }
+
+</style>
+<script type="text/javascript">
+
+    jQuery.fn.highlight = function (str, className) {
+        var regex = new RegExp("\\b" + str + "\\b", "gi");
+
+        return this.each(function () {
+            this.innerHTML = this.innerHTML.replace(regex, function (matched) {
+                return "<span class=\"" + className + "\">" + matched + "</span>";
+            });
+        });
+    };
+
+    (function ($) {
+
+
+
+        $.fn.extend({
+            donetyping: function (callback, timeout) {
+                timeout = timeout || 1e3; // 1 second default timeout
+                var timeoutReference,
+                    doneTyping = function (el) {
+                        if (!timeoutReference) return;
+                        timeoutReference = null;
+                        callback.call(el);
+                    };
+                return this.each(function (i, el) {
+                    var $el = $(el);
+                    // Chrome Fix (Use keyup over keypress to detect backspace)
+                    // thank you @palerdot
+                    $el.is(':input') && $el.on('keyup keypress', function (e) {
+                        // This catches the backspace button in chrome, but also prevents
+                        // the event from triggering too premptively. Without this line,
+                        // using tab/shift+tab will make the focused element fire the callback.
+                        if (e.type == 'keyup' && e.keyCode != 8) return;
+
+                        // Check if timeout has been set. If it has, "reset" the clock and
+                        // start over again.
+                        if (timeoutReference) clearTimeout(timeoutReference);
+                        timeoutReference = setTimeout(function () {
+                            // if we made it here, our timeout has elapsed. Fire the
+                            // callback
+                            doneTyping(el);
+                        }, timeout);
+                    }).on('blur', function () {
+                        // If we can, fire the event since we're leaving the field
+                        doneTyping(el);
+                    });
+                });
+            }
+        });
+    })(jQuery);
+
+    $j(function () {
+
+        $j('#input_query').donetyping(function () {
+            $j.ajax({
+                data: {query: $j(this).val()},
+                url: "<?php echo $this->helper('adminhtml')->getUrl('*/*/get'); ?>",
+                beforeSend: function (xhr) {
+                    $j('#content_search').html("Chargement...");
+                }
+            })
+                .done(function (data) {
+                    $j('#content_search').html(data);
+                    $j('#content_search').highlight($j('#input_query').val(), 'highlight');
+
+
+                    $j('#content_search select').barrating('show', {
+                        theme: 'bars-1to10',
+                        readonly: true,
+                        showSelectedRating: false
+                    });
+
+                    $j('#content_search .skills .tool').simpletip({fixed: false,
+                        onBeforeShow: function(){
+                            this.update(this.getParent().next('span.desc').text());
+                        }});
+
+
+                });
+        });
+
+    });
+</script>

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<layout>
+
+	<!--
+	Job Admin Panel
+	-->
+	
+	<adminhtml_training_index_index>
+		<reference name="content">
+			<block type="gpec_training/adminhtml_training" name="training"/>
+		</reference>
+	</adminhtml_training_index_index>
+
+	<adminhtml_training_index_new>
+		<update handle="adminhtml_training_training_edit" />
+	</adminhtml_training_index_new>
+
+	<adminhtml_training_index_edit>
+		<reference name="content">
+			<block type="gpec_training/adminhtml_training_edit" name="training_edit"></block>
+		</reference>
+        <reference name="left">
+            <block type="gpec_training/adminhtml_training_edit_tabs" name="training_edit_tabs"/>
+        </reference>
+	</adminhtml_training_index_edit>
+
+    <adminhtml_training_index_user>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_training/adminhtml_training_edit_tab_user" name="user.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>user.grid</grid_block_name>
+                        <data_callback>getSelectedUser</data_callback>
+                        <hidden_input_name>links[user]</hidden_input_name>
+                        <reload_param_name>user_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_training_index_user>
+
+    <adminhtml_training_index_usergrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_training/adminhtml_training_edit_tab_user" name="user.grid"/>
+        </block>
+    </adminhtml_training_index_usergrid>
+
+
+    <adminhtml_permissions_user_training>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_training" name="training.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>training.grid</grid_block_name>
+                        <data_callback>getSelectedTraining</data_callback>
+                        <hidden_input_name>links[training]</hidden_input_name>
+                        <reload_param_name>training_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_permissions_user_training>
+
+    <adminhtml_permissions_user_traininggrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/permissions_user_edit_tab_training" name="training.grid"/>
+        </block>
+    </adminhtml_permissions_user_traininggrid>
+
+
+</layout>

@@ -1,0 +1,46 @@
+<?php $skills = $this->getSkills(); ?>
+<?php if ($skills): ?>
+    <?php foreach ($this->getSkills() as $skill): ?>
+        <input type="checkbox" class="skill_selection" name="skill_ids[]" id="skill_<?php echo $skill['skill_id']; ?>"
+               value="<?php echo $skill['skill_id']; ?>"/> <label
+            for="skill_<?php echo $skill['skill_id']; ?>"><?php echo $skill['category']; ?>
+            - <?php echo $skill['name']; ?></label><br/>
+    <?php endforeach; ?>
+    <div style="float:right">
+        <button id="insert_skill">Insérer la séléction</button>
+    </div>
+<?php endif; ?>
+
+
+<script type="text/javascript">
+    var _this = this;
+    $j(function () {
+        <?php $_htmlName = 'posted_skills'; ?>
+        _rkstorelocator_counter = 1;
+        $j('#insert_skill').click(function () {
+            var selection = [];
+            $j('input.skill_selection:checked').each(function () {
+
+                var table = function () {
+                    return $j(window.parent.document).find('#attribute-options-table tbody');
+                }
+
+                var skillId = $j(this).val();
+                var skillName = $j(this).next('label').text();
+
+                var row = '<tr class="option-row" id="skill-row-' + skillId + '">' +
+                    '<td class="name">' + skillName + '</td>' +
+                    '<td class="note"><select name="<?php echo $_htmlName; ?>[' + skillId + '][note]"><option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option></select></td>' +
+                    '<td class="comment"><input name="<?php echo $_htmlName; ?>[' + skillId + '][comment]" value="" class="input-text" type="text"></td>' +
+                    '<td class="a-left" id="delete_button_container_option_' + skillId + '"><input id="delete-row-' + skillId + '" type="hidden" class="delete-flag" value=""/><button onclick="$(\'skill-row-' + skillId + '\').style.display=\'none\'; $(\'delete-row-{{id}}\').setValue(1);" title="Delete" type="button" class="scalable delete delete-option"><span><span><span>Retirer</span></span></span></button></td>' +
+                    '</tr>';
+
+                if(table().find('tr[id="skill-row-'+skillId+'"]').length == 0) {
+                    table().append(row);
+                }
+
+            });
+
+        })
+    });
+</script>

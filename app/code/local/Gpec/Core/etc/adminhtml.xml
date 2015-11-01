@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <gpec_core translate="title" module="gpec_core">
+            <title>Recherche</title>
+            <sort_order>1</sort_order>
+            <action>adminhtml/gpec_index</action>
+        </gpec_core>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <gpec_core translate="title" module="gpec_core">
+                        <title>Recherche</title>
+                        <sort_order>300</sort_order>
+                    </gpec_core>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

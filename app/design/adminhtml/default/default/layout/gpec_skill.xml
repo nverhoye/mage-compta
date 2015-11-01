@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<layout>
+
+    <!--
+    Job Admin Panel
+    -->
+
+    <adminhtml_skill_index_index>
+        <reference name="content">
+            <block type="gpec_skill/adminhtml_skill" name="skill"/>
+        </reference>
+    </adminhtml_skill_index_index>
+
+    <adminhtml_skill_index_new>
+        <update handle="adminhtml_skill_skill_edit"/>
+    </adminhtml_skill_index_new>
+
+    <adminhtml_skill_index_edit>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>gpec_skill.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>gpec_skill.js</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="gpec_skill/adminhtml_skill_edit" name="skill_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="gpec_skill/adminhtml_skill_edit_tabs" name="skill_edit_tabs"/>
+        </reference>
+    </adminhtml_skill_index_edit>
+
+
+    <adminhtml_skill_index_job>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_skill/adminhtml_skill_edit_tab_job" name="job.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>job.grid</grid_block_name>
+                        <data_callback>getSelectedJob</data_callback>
+                        <hidden_input_name>links[job]</hidden_input_name>
+                        <reload_param_name>job_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_skill_index_job>
+
+    <adminhtml_skill_index_jobgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_skill/adminhtml_skill_edit_tab_job" name="job.grid"/>
+        </block>
+    </adminhtml_skill_index_jobgrid>
+
+    <adminhtml_skill_index_manage>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_skill/adminhtml_skill" name="skill.manage" template="gpec_skill/manage.phtml"/>
+        </block>
+    </adminhtml_skill_index_manage>
+
+</layout>

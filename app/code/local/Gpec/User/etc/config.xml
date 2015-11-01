@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Gpec_User>
+            <version>0.1.0</version>
+        </Gpec_User>
+    </modules>
+    <global>
+        <helpers>
+            <gpec_user>
+                <class>Gpec_User_Helper</class>
+            </gpec_user>
+        </helpers>
+        <blocks>
+            <gpec_user>
+                <class>Gpec_User_Block</class>
+            </gpec_user>
+        </blocks>
+        <resources>
+            <gpec_user_setup>
+                <setup>
+                    <module>Gpec_User</module>
+                </setup>
+            </gpec_user_setup>
+        </resources>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <gpec_user>
+                    <file>gpec_user.xml</file>
+                </gpec_user>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

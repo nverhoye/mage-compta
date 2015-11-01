@@ -1,0 +1,39 @@
+
+#user_job_fieldset .form-list {
+    width: 100% !important;
+}
+
+#user_job_fieldset td.label, #user_job_fieldset td.label label {
+    width: 40px !important;
+}
+
+
+#user_job_fieldset tr.option-row td {
+    text-align: center;
+    padding: 3px 3px 3px 6px;
+}
+
+#user_job_fieldset tr.option-row td.name{
+    width: 30% !important;
+    text-align: left;
+}
+
+#user_job_fieldset tr.option-row td.note{
+    width: 6% !important;
+    padding-right:0;
+    border-bottom: 1px solid #dadfe0 !important;
+}
+
+#user_job_fieldset tr.option-row td.comment{
+    width: 50% !important;
+}
+
+
+#attribute-options-table > tbody > tr > th.name {
+    padding: 3px 3px 3px 6px;
+}
+
+#user_job_fieldset tr.option-row td input,
+#user_job_fieldset tr.option-row td select{
+    width: 95% !important;
+}

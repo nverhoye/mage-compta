@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<layout>
+
+	<!--
+	Job Admin Panel
+	-->
+	
+	<adminhtml_job_index_index>
+		<reference name="content">
+			<block type="gpec_job/adminhtml_job" name="job"/>
+		</reference>
+	</adminhtml_job_index_index>
+
+	<adminhtml_job_index_new>
+		<update handle="adminhtml_job_job_edit" />
+	</adminhtml_job_index_new>
+
+	<adminhtml_job_index_edit>
+		<reference name="content">
+			<block type="gpec_job/adminhtml_job_edit" name="job_edit"></block>
+		</reference>
+        <reference name="left">
+            <block type="gpec_job/adminhtml_job_edit_tabs" name="job_edit_tabs"/>
+        </reference>
+	</adminhtml_job_index_edit>
+
+    <adminhtml_job_index_skill>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_job/adminhtml_job_edit_tab_skill" name="skill.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>skill.grid</grid_block_name>
+                        <data_callback>getSelectedSkill</data_callback>
+                        <hidden_input_name>links[skill]</hidden_input_name>
+                        <reload_param_name>skill_ids</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>sort_order</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_job_index_skill>
+
+    <adminhtml_job_index_skillgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_job/adminhtml_job_edit_tab_skill" name="skill.grid"/>
+        </block>
+    </adminhtml_job_index_skillgrid>
+	
+</layout>

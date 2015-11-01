@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+    <gpec_skill_index_list>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gpec_skill/skill" template="gpec_skill/list.phtml" name="skill.list"/>
+        </block>
+    </gpec_skill_index_list>
+</layout>

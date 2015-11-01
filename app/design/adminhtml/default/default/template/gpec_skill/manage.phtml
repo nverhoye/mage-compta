@@ -1,0 +1,72 @@
+<script type="text/javascript"
+        src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>lib/jquery/jquery-1.10.2.js"></script>
+<script type="text/javascript"
+        src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>lib/jquery/noconflict.js"></script>
+<script type="text/javascript"
+        src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>prototype/prototype.js"></script>
+
+<link rel="stylesheet" type="text/css"
+      href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN); ?>adminhtml/default/default/reset.css">
+<link rel="stylesheet" type="text/css"
+      href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN); ?>adminhtml/default/default/boxes.css">
+<style>
+    .form-list td.label label, #list_skill_related label {
+        font-size: 12px;
+    }</style>
+
+
+<div class="entry-edit">
+    <div class="fieldset " id="user_base_fieldset">
+        <div class="hor-scroll">
+            <table cellspacing="0" class="form-list">
+                <tbody>
+                <tr>
+                    <td class="label"><label for="job_id">Compétences du poste</label></td>
+                    <td class="value">
+                        <select name="job_id" id="job_id" <?php if (!$this->helper('gpec_user')->isAdminRh()): ?>disabled="disabled"<?php endif; ?>>
+                            <?php foreach ($this->helper('gpec_job')->getOptions() as $jobId => $jobName): ?>
+                                <option <?php if($this->getJobId() == $jobId): ?>selected<?php endif; ?> value="<?php echo $jobId; ?>"><?php echo $jobName; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr id="list_skill_related">
+                    <td class="label"><label for="user_username">Liste</label></td>
+                    <td class="values">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $j(function () {
+
+        var ajaxCall = function(jobId) {
+            return $j.ajax({
+                url: '<?php echo $this->getUrl('gpec_skill/index/list') ?>',
+                type: 'post',
+                dataType: "html",
+                data: 'job_id=' + jobId,
+                beforeSend: function()
+                {
+                    $j('#user_base_fieldset .values').html("<p style='font-size:12px'>Chargement...</p>");
+                },
+                success: function (data) {
+                    $j('#user_base_fieldset .values').html(data)
+                }
+            });
+        }
+
+        <?php if($this->getJobId()): ?>
+            ajaxCall(<?php echo $this->getJobId() ?>);
+        <?php endif; ?>
+
+        $j('select#job_id').change(function () {
+            var jobId = $j(this).val();
+            ajaxCall(jobId);
+        })
+    })
+</script>

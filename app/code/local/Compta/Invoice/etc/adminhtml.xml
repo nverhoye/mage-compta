@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <compta_invoice translate="title" module="compta_invoice">
+            <title>Factures</title>
+            <sort_order>31</sort_order>
+            <action>adminhtml/invoice_index</action>
+        </compta_invoice>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <compta_invoice translate="title" module="compta_invoice">
+                        <title>Factures</title>
+                        <sort_order>310</sort_order>
+                    </compta_invoice>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

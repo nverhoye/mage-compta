@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <compta_customer translate="title" module="compta_customer">
+            <title>Clients</title>
+            <sort_order>31</sort_order>
+            <action>adminhtml/customer_index</action>
+        </compta_customer>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <compta_customer translate="title" module="compta_customer">
+                        <title>Clients</title>
+                        <sort_order>310</sort_order>
+                    </compta_customer>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,57 @@
+<?php foreach ($this->getResults() as $id => $result): ?>
+    <div
+        style="overflow:scroll;float:left; width:47%; padding:5px; margin:10px 5px 5px 0;  border:1px solid #8A8A8A; height:200px; max-height: 200px">
+        <b><?php echo $result['firstname']; ?> <?php echo $result['lastname']; ?></b>
+        &nbsp;
+        <a href="<?php echo $this->helper('adminhtml')->getUrl('adminhtml/permissions_user/edit', array('user_id'=>$id)); ?>"><img width="10" src="<?php echo $this->getSkinUrl('images/details.png'); ?>"/></a><br/>
+        <i><?php echo $result['job']; ?></i>
+        <br/><br/>
+
+        <?php if (isset($result['skills']) && !empty($result['skills'])): ?>
+            <u>Compétences</u> au <?php echo $result['skill_updated']; ?> <br/>
+
+            <table class="skills"style="width:100%">
+                <?php foreach ($result['skills'] as $skillId => $skillData): ?>
+                <tr>
+                    <td style="width:20%" ><?php echo $skillData['category']; ?></a>
+                        </td>
+                    <td style="width:20%"><a class="tool"><?php echo $skillData['name']; ?></a><span class="desc no-display"><?php echo $skillData['description']; ?></span></td>
+                    <td style="width:15%">
+                    <select id="rate_<?php echo $id; ?>_<?php echo $skillId; ?>" name="rating">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <option <?php if ($i == $skillData['note']): ?> selected <?php endif; ?>value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php endfor; ?>
+                    </select></td>
+                    <td style="width:45%">
+                        <?php if(!$this->helper('gpec_user')->isAdminCommerciaux()): ?>
+                            <?php if($skillData['comment']): ?>« <?php echo $skillData['comment']; ?> »<?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tr>
+            </table>
+            <br/>
+        <?php endif; ?>
+
+        <?php if (isset($result['training']) && !empty($result['training'])): ?>
+            <u>Formations : </u><br/>
+            <?php foreach ($result['training'] as $training): ?>
+                - <?php echo $training['name']; ?> par <?php echo $training['trainer']; ?> (du <?php echo $training['started_at']; ?> au <?php echo $training['ended_at']; ?>)<br/>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+
+        <?php if (isset($result['report']) && !empty($result['report'])): ?>
+            <u>Rapports : </u><br/>
+            <?php foreach ($result['report'] as $report): ?>
+                <?php if($report['type'] == 'EDP' && $this->helper('gpec_user')->isAdminCommerciaux()) {
+                    continue;
+                } ?>
+                - <?php echo $report['type']; ?> : <?php echo $report['name']; ?><br/>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+
+    </div>
+<?php endforeach; ?>
