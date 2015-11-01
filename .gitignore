@@ -1,0 +1,48 @@
+# Created by .ignore support plugin (hsz.mobi)
+### NetBeans template
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+*.iml
+
+## Directory-based project format:
+.idea/
+
+
+## File-based project format:
+*.ipr
+*.iws
+
+
+### Magento template
+.modgit/
+app/design/install/
+app/etc/applied.patches.list
+app/etc/config.xml
+app/etc/enterprise.xml
+app/etc/local.xml.additional
+app/etc/local.xml.template
+app/etc/local.xml
+index.php.sample
+/install.php
+LICENSE_AFL.txt
+LICENSE.html
+LICENSE.txt
+LICENSE_EE*
+media/
+nbproject/
+pear
+pear/
+php.ini.sample
+pkginfo/
+RELEASE_NOTES.txt
+skin/install/
+var/
