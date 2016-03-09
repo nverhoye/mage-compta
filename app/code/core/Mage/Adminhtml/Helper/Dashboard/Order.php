@@ -36,7 +36,6 @@ class Mage_Adminhtml_Helper_Dashboard_Order extends Mage_Adminhtml_Helper_Dashbo
 
     protected function _initCollection()
     {
-        /*
         $isFilter = $this->getParam('store') || $this->getParam('website') || $this->getParam('group');
 
         $this->_collection = Mage::getResourceSingleton('reports/order_collection')
@@ -54,51 +53,9 @@ class Mage_Adminhtml_Helper_Dashboard_Order extends Mage_Adminhtml_Helper_Dashbo
             $this->_collection->addFieldToFilter('store_id',
                 array('eq' => Mage::app()->getStore(Mage_Core_Model_Store::ADMIN_CODE)->getId())
             );
-        }*/
+        }
 
 
-      $this->_collection = Mage::getResourceSingleton('reports/order_collection')
-            ->prepareSummary($this->getParam('period'), 0, 0, false);
-
-        echo $this->_collection->getSelect(); die;
-
-        $collection = Mage::getResourceSingleton('compta_invoice/invoice_collection');
-        $collection->addFieldToSelect(new Zend_Db_Expr('SUM(amount) as revenue'));
-        $collection->addFieldToSelect(new Zend_Db_Expr('COUNT(invoice_id) as quantity'));
-        $collection->addFieldToSelect(new Zend_Db_Expr("CONCAT(DATE_FORMAT(DATE_ADD(`payment_date`, INTERVAL 7200 SECOND), '%Y-%m-%d %H:'), '00') AS `range`"));
-
-       // $collection->addFieldToFilter(new Zend_Db_Expr('adjusted = 1'));
-        $collection->addFieldToFilter('adjusted','1');
-
-//        $collection->addFieldToFilter(new Zend_Db_Expr('adjusted = 1'));
-
-
-        $range = $this->getParam('period');
-
-        $dateRange = Mage::getResourceSingleton('reports/order_collection')->getDateRange($range, 0, 0);
-/*
-        $tzRangeOffsetExpression = Mage::getResourceSingleton('reports/order_collection')->_getTZRangeOffsetExpression(
-            $range, 'payment_date', $dateRange['from'], $dateRange['to']
-        );
-*/
-        $collection->getSelect()
-            ->order('range', Zend_Db_Select::SQL_ASC)
-            ->group(new Zend_Db_Expr("CONCAT(DATE_FORMAT(DATE_ADD(`payment_date`, INTERVAL 7200 SECOND), '%Y-%m-%d %H:'), '00')"));
-
-        $collection->addFieldToFilter('payment_date', $dateRange);
-
-
-
-
-      //  echo $collection->getSelect(); die;
-/*
-
-        WHERE (main_table.state NOT IN ('pending_payment', 'new'))
-        AND (created_at >= '2015-09-19 22:10:47' AND created_at <= '2015-09-20 22:10:47')
-        GROUP BY CONCAT(DATE_FORMAT(DATE_ADD(`created_at`, INTERVAL 7200 SECOND), '%Y-%m-%d %H:'), '00')
-        ORDER BY `range` ASC
-        */
-        $this->_collection = $collection;
 
         $this->_collection->load();
     }
