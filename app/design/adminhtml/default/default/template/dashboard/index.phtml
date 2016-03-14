@@ -125,15 +125,16 @@ function toggleCal(id) {
                 </div>
             </td>
             <td>
-                <div class="entry-edit" style="border:1px solid #ccc;">
-                    <?php echo $this->getChildHtml('diagrams') ?>
+                <div class="entry-edit" style="width:550px;margin-right:0">
+                    <?php //echo $this->getChildHtml('diagrams') ?>
                     <?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
                         <div id="diagram_tab_content"></div>
                     <?php endif; ?>
-                    <div style="margin:20px;">
+                    <div>
+                        <div class="entry-edit-head"><h4>Prévisions CA</h4></div>
                         <?php echo $this->getChildHtml('totals') ?>
                     </div>
-                    <div style="margin:20px;">
+                    <div>
                         <?php echo $this->getChildHtml('grids') ?>
                         <div id="grid_tab_content"></div>
                     </div>

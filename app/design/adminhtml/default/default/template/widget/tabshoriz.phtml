@@ -24,9 +24,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<!-- <?php if($this->getTitle()): ?>
+<?php if($this->getTitle()): ?>
     <h3><?php echo $this->getTitle() ?></h3>
-<?php endif ?> -->
+<?php endif ?>
+    <h3><?php echo $this->getTitle() ?></h3>
+
+
+
+<?php /*
 <?php if(!empty($tabs)): ?>
 <ul id="<?php echo $this->getId() ?>" class="tabs-horiz">
 <?php foreach ($tabs as $_tab): ?>
@@ -43,3 +48,4 @@
     <?php echo $this->getId() ?>JsTabs = new varienTabs('<?php echo $this->getId() ?>', '<?php echo $this->getDestElementId() ?>', '<?php echo $this->getActiveTabId() ?>', <?php echo $this->getAllShadowTabs()?>);
 </script>
 <?php endif; ?>
+*/ ?>

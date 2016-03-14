@@ -1,0 +1,8 @@
+<config>
+  <modules>
+    <Compta_Calendar>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Compta_Calendar>
+  </modules>
+</config>

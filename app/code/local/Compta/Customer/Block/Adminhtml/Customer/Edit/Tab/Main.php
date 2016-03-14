@@ -86,7 +86,33 @@ class Compta_Customer_Block_Adminhtml_Customer_Edit_Tab_Main extends Mage_Adminh
             ));
 
 
+        $fieldset = $form->addFieldset('more_fieldset', array(
+            'legend' => Mage::helper('compta_customer')->__('Complément')
+        ));
 
+        $fieldset->addField('thm', 'text',
+            array(
+                'name' => 'thm',
+                'label' => Mage::helper('compta_customer')->__('Taux horaire HT'),
+                'required' => false,
+                'disabled' => $isElementDisabled
+            ));
+
+        $fieldset->addField('paiement_delay', 'text',
+            array(
+                'name' => 'paiement_delay',
+                'label' => Mage::helper('compta_customer')->__('Délais de paiement (moyen)'),
+                'required' => false,
+                'disabled' => $isElementDisabled,
+            ));
+
+        $fieldset->addField('color', 'text',
+            array(
+                'name' => 'color',
+                'label' => Mage::helper('compta_customer')->__('Couleur (calendrier)'),
+                'required' => false,
+                'disabled' => $isElementDisabled
+            ));
 
         Mage::dispatchEvent('compta_customer_adminhtml_customer_edit_tab_main_prepare_form', array(
             'form' => $form

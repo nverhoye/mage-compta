@@ -60,7 +60,7 @@ class Compta_Customer_Block_Adminhtml_Customer_Edit extends Mage_Adminhtml_Block
     public function getHeaderText()
     {
         if (Mage::registry('current_customer')->getId()) {
-            return Mage::helper('compta_customer')->__("Modifier le client '%s'", $this->htmlEscape(Mage::registry('current_customer')->getName()));
+            return Mage::helper('compta_customer')->__("Modifier le client '%s'", $this->htmlEscape(Mage::registry('current_customer')->getNom()));
         } else {
             return Mage::helper('compta_customer')->__("Saisie d'un nouveau client");
         }

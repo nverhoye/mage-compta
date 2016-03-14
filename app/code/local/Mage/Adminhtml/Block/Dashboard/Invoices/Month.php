@@ -47,7 +47,7 @@ class Mage_Adminhtml_Block_Dashboard_Invoices_Month extends Mage_Adminhtml_Block
 
         $monthsTrad = array(
             'January' => 'Janvier',
-            'Fabruary' => 'Février',
+            'February' => 'Février',
             'March' => 'Mars',
             'April' => 'Avril',
             'May' => 'Mai',

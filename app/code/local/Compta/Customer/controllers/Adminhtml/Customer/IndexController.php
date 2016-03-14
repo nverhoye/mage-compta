@@ -119,6 +119,8 @@ class Compta_Customer_Adminhtml_Customer_IndexController extends Mage_Adminhtml_
         // check if data sent
         if ($data = $this->getRequest()->getPost()) {
 
+            //var_dump($data); die;
+
             $model = $this->_initCustomerSave();
 
             // try to save it

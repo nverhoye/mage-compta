@@ -16,7 +16,7 @@ class Compta_Invoice_Block_Adminhtml_Renderer_Adjusted extends Mage_Adminhtml_Bl
             '0' => 'Non',
             '1' => 'Oui'
         );
-        return $trans[$row->getData('adjusted')];
+        return isset($trans[$row->getData('adjusted')]) ? $trans[$row->getData('adjusted')] : $trans[0];
     }
 
 

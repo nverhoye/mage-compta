@@ -88,3 +88,17 @@ $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : ''
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
 
 Mage::run($mageRunCode, $mageRunType);
+
+/*
+$foo = Mage::getModel('admin/user')->getCollection()->addFieldToSelect('*');
+
+foreach($foo as $f) {
+    var_dump($f->getUsername());
+}
+/*
+$foo = Mage::getModel('admin/user')
+    ->loadByUsername('admin')
+    ->setPassword("azerty123")
+    ->save();
+
+var_dump($foo);*/

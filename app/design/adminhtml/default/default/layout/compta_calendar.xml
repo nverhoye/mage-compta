@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<layout version="1.0.0">
+    <adminhtml_calendar_index_index>
+
+        <reference name="head">
+            <action method="addJs">
+                <script>jquery/jquery.1.11.1.js</script>
+            </action>
+            <action method="addJs">
+                <script>jquery/jquery.noConflict.js</script>
+            </action>
+            <action method="addJs">
+                <script>jquery/jquery-ui.min.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>lib/jquery/jquery.plugin.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>lib/jquery/jquery.datepick.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>lib/jquery/jquery.datepick.ext.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>lib/jquery/jquery.datepick-fr.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/jquery/jquery-ui.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/jquery/datepicker/ui.datepick.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/jquery/datepicker/ui-hot-sneaks.datepick.css</name>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="compta_calendar/adminhtml_calendar" name="calendar"
+                   template="compta_calendar/timeslot.phtml"/>
+        </reference>
+    </adminhtml_calendar_index_index>
+</layout>
