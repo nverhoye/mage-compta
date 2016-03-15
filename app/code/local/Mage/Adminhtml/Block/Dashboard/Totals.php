@@ -82,8 +82,6 @@ class Mage_Adminhtml_Block_Dashboard_Totals extends Mage_Adminhtml_Block_Dashboa
                 $tab[$yyyy_mm][$calendar->getCustomerId()]['delay'] = $delayPaiement;
 
 
-
-
             }
         }
 

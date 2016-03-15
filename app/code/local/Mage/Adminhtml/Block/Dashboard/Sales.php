@@ -64,7 +64,7 @@ class Mage_Adminhtml_Block_Dashboard_Sales extends Mage_Adminhtml_Block_Dashboar
         $collection->load();
         $sales = $collection->getFirstItem();
 
-        $this->addTotal($this->__('Ventes depuis le début (Brut)'), $this->_getSalesLifetime());
+        $this->addTotal($this->__("Ventes depuis le début d'activité (Brut)"), $this->_getSalesLifetime());
         $this->addTotal($this->__('Moyenne des prestations (Brut)'), $this->_getSalesAverage());
     }
 

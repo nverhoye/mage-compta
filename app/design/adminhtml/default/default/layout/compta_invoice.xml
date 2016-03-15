@@ -2,6 +2,21 @@
 
 <layout>
 
+    <default>
+        <reference name="head">
+            <action method="addJs">
+                <script>jquery/jquery.1.11.1.js</script>
+            </action>
+            <action method="addJs">
+                <script>jquery/jquery.noConflict.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>lib/jquery/chart/chart.bar.js</name>
+            </action>
+        </reference>
+    </default>
+
 	<!--
 	Job Admin Panel
 	-->

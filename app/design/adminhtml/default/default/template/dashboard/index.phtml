@@ -106,12 +106,307 @@ function toggleCal(id) {
             </span>
         </fieldset>
     </div>
+
+
+    <?php
+
+    $monthsTrad = array(
+        '1' => 'Janv.',
+        '2' => 'Févr.',
+        '3' => 'Mars',
+        '4' => 'Avr.',
+        '5' => 'Mai',
+        '6' => 'Juin',
+        '7' => 'Juil.',
+        '8' => 'Août',
+        '9' => 'Sept.',
+        '10' => 'Oct.',
+        '11' => 'Novr.',
+        '12' => 'Déc.'
+    );
+
+
+    $nextRangeMonth[date('Y-m')] = date('Y-m');
+    $beforeRangeMonth = array();
+
+    for($i = 1; $i<= 4; $i++) {
+        $nextMonthDate = date('Y-m', strtotime("+$i months", strtotime(date('Y-m') . '-01')));
+        $nextRangeMonth[$nextMonthDate] = $nextMonthDate;
+    }
+
+
+    for($i = 0; $i<= 3; $i++) {
+        $beforeMonthDate = date('Y-m', strtotime("-$i months", strtotime(date('Y-m') . '-01')));
+        $beforeRangeMonth[$beforeMonthDate] = $beforeMonthDate;
+    }
+
+    $paidBeforeMonth = array();
+
+
+    foreach($beforeRangeMonth as $month) {
+
+        $invoices = Mage::getModel('compta_invoice/invoice')->getCollection()
+            ->addFieldToFilter('adjusted', 1)
+            ->addFieldToFilter('payment_date', array('like' => $month.'%'))
+            ->addFieldToSelect('*');
+
+        $paidBeforeMonth[$month] = 0;
+
+        foreach($invoices as $invoice) {
+            $paidBeforeMonth[$month] += $invoice->getAmount();
+        }
+
+    }
+
+    ///////
+
+    $tab = array();
+
+    $calendarCollection = Mage::getModel('compta_calendar/calendar')->getCollection();
+
+    foreach ($calendarCollection as $calendar) {
+
+        $dateValues = Mage::helper('core')->jsonDecode($calendar->getValues());
+        foreach ($dateValues as $day => $nhour) {
+            $customer = Mage::getModel('compta_customer/customer')->load($calendar->getCustomerId());
+
+            $delayPaiement = $customer->getPaiementDelay();
+            $yyyy_mm = substr($day, 0, 7);
+
+            if(!isset($tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'])) {
+                $tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'] = 0;
+            }
+            $tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour']+=$nhour;
+            $tab[$yyyy_mm][$calendar->getCustomerId()]['delay'] = $delayPaiement;
+
+        }
+    }
+
+
+    ksort($tab);
+    foreach($tab as $monthYYYYmm => $customerId) {
+
+        foreach($customerId as $cId => $data) {
+
+            $addDay = $data['delay'] ? $data['delay'] : "0";
+
+            $nextMonthDate = date('Y-m', strtotime("+1 months +$addDay days", strtotime($monthYYYYmm . '-01')));
+            $customer = Mage::getModel('compta_customer/customer')->load($calendar->getCustomerId());
+
+
+            if(!isset($prevision[$nextMonthDate])) {
+                $prevision[$nextMonthDate] = 0;
+            }
+            $prevision[$nextMonthDate] += ($customer->getThm() * $data['nbhour']);
+        }
+
+
+    }
+
+    $paidAfterMonth = array();
+    foreach($nextRangeMonth as $yyyyMM) {
+        if(isset($prevision[$yyyyMM])) {
+            $paidAfterMonth[$yyyyMM] = $prevision[$yyyyMM];
+        } else {
+            $paidAfterMonth[$yyyyMM] = 0;
+        }
+    }
+
+    ksort($paidBeforeMonth);
+
+    $beforeMonths = array();
+    $afterMonths = array();
+    $totalMonths = array();
+    $totalMonthsTrad = array();
+
+    foreach($paidBeforeMonth as $paidBeforeMonth => $amount) {
+        $year = (int) substr($paidBeforeMonth, 0, -2);
+        $month = (int) substr($paidBeforeMonth, 5, 7);
+        $beforeMonths[$year . '-' .$month] = $amount;
+        $totalMonths[] = $year . '-' .$month;
+        $totalMonthsTrad[$monthsTrad[$month] . ' ' .$year] = $monthsTrad[$month] . ' ' .$year;
+    }
+
+    foreach($paidAfterMonth as $paidAfterMonth => $amount) {
+        $year = (int) substr($paidAfterMonth, 0, -2);
+        $month = (int) substr($paidAfterMonth, 5, 7);
+        $afterMonths[$year . '-' .$month] = $amount;
+        $totalMonths[] = $year . '-' .$month;
+        $totalMonthsTrad[$monthsTrad[$month] . ' ' .$year] =  $monthsTrad[$month] . ' ' .$year;
+    }
+
+    foreach($totalMonths as $tMonth) {
+
+        if(!isset($beforeMonths[$tMonth])) {
+            $beforeMonths[$tMonth] = 0;
+        }
+        if(!isset($afterMonths[$tMonth])) {
+            $afterMonths[$tMonth] = 0;
+        }
+    }
+
+    ksort($beforeMonths);
+    ksort($afterMonths);
+
+    $beforeMonthsNet = array();
+    $afterMonthsNet = array();
+
+    foreach($beforeMonths as $k => $v) {
+        $beforeMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
+    }
+
+
+    foreach($afterMonths as $k => $v) {
+        $afterMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
+    }
+
+    ?>
+
+    <div style="padding-left:26px !important">
+        <button onclick="jQuery('#myChartNet').removeClass('no-display');jQuery('#myChart').addClass('no-display');">NET</button>
+        <button onclick="jQuery('#myChartNet').addClass('no-display');jQuery('#myChart').removeClass('no-display');">BRUT</button>
+    </div>
+<style>.chart {width:82%}</style>
+    <div id="myChart" class="chart" style="min-height: 300px; margin: 0 auto"></div>
+    <div id="myChartNet" class="chart no-display" style=" min-height: 300px; margin: 0 auto"></div>
+
+    <script type="text/javascript">
+
+        jQuery(function () {
+            jQuery('#myChart').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "CA Prévisionnel BRUT"
+                },
+                xAxis: {
+                    categories: ["<?php echo implode('","', array_values($totalMonthsTrad)); ?>"]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'CA'
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y} € <br/>Total: {point.stackTotal} €'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black'
+                            },
+                            format: '{point.y:.0f} €'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Encaissé',
+                    color : "#A1D490",
+                    data: [<?php echo implode(',', array_values($beforeMonths)); ?>]
+                }, {
+                    name: 'Prévision',
+                    color: "#F0E171",
+                    data: [<?php echo implode(',', array_values($afterMonths)); ?>]
+                }]
+            });
+            jQuery('#myChartNet').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "CA Prévisionnel NET (-50%)"
+                },
+                xAxis: {
+                    categories: ["<?php echo implode('","', $totalMonthsTrad); ?>"]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'CA'
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y} € <br/>Total: {point.stackTotal} €'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black'
+                            },
+                            format: '{point.y:.0f} €'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Encaissé',
+                    color : "#A1D490",
+                    data: [<?php echo implode(',', array_values($beforeMonthsNet)); ?>]
+                }, {
+                    name: 'Prévision',
+                    color: "#F0E171",
+                    data: [<?php echo implode(',', array_values($afterMonthsNet)); ?>]
+
+                }]
+            });
+        });
+    </script>
+
+
+
     <?php echo $this->getChildHtml('store_switcher') ?>
     <table cellspacing="25" width="100%">
         <tr>
             <td><?php echo $this->getChildHtml('sales') ?>
                 <div class="entry-edit">
-                    <div class="entry-edit-head"><h4><?php echo $this->__('5 dernières factures') ?></h4></div>
+                    <div class="entry-edit-head"><h4><?php echo $this->__('5 dernières factures payées') ?></h4></div>
                     <fieldset class="np"><?php echo $this->getChildHtml('lastInvoices'); ?></fieldset>
                 </div>
                 <div class="entry-edit">
