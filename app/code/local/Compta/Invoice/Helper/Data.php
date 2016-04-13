@@ -44,6 +44,7 @@ class Compta_Invoice_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function toNet($amount)
     {
+        return round($amount * 0.5);
         //$tax = '22.9';
         $tax = 50;
         $net = ($amount / (1 + ($tax/100)));

@@ -26,67 +26,67 @@
 ?>
 
 <?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
-<script type="text/javascript">
-//<![CDATA[
-function changeDiagramsPeriod(periodObj) {
-    periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-<?php foreach ($this->getChild('diagrams')->getTabsIds() as $tabId): ?>
-    ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
-    ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => '', 'period' => '')) ?>' + ajaxBlockParam + periodParam;
-    new Ajax.Request(ajaxBlockUrl, {
-        parameters: {isAjax: 'true', form_key: FORM_KEY},
-        onSuccess: function(transport) {
-            tabContentElementId = '<?php echo $this->getChild('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
-            try {
-                if (transport.responseText.isJSON()) {
-                    var response = transport.responseText.evalJSON()
-                    if (response.error) {
-                        alert(response.message);
+    <script type="text/javascript">
+        //<![CDATA[
+        function changeDiagramsPeriod(periodObj) {
+            periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
+            <?php foreach ($this->getChild('diagrams')->getTabsIds() as $tabId): ?>
+            ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
+            ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => '', 'period' => '')) ?>' + ajaxBlockParam + periodParam;
+            new Ajax.Request(ajaxBlockUrl, {
+                parameters: {isAjax: 'true', form_key: FORM_KEY},
+                onSuccess: function (transport) {
+                    tabContentElementId = '<?php echo $this->getChild('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+                    try {
+                        if (transport.responseText.isJSON()) {
+                            var response = transport.responseText.evalJSON()
+                            if (response.error) {
+                                alert(response.message);
+                            }
+                            if (response.ajaxExpired && response.ajaxRedirect) {
+                                setLocation(response.ajaxRedirect);
+                            }
+                        } else {
+                            $(tabContentElementId).update(transport.responseText);
+                        }
                     }
-                    if(response.ajaxExpired && response.ajaxRedirect) {
-                        setLocation(response.ajaxRedirect);
+                    catch (e) {
+                        $(tabContentElementId).update(transport.responseText);
                     }
-                } else {
-                    $(tabContentElementId).update(transport.responseText);
                 }
-            }
-            catch (e) {
-                $(tabContentElementId).update(transport.responseText);
-            }
-        }
-    });
-<?php endforeach; ?>
-    ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => 'totals', 'period' => '')) ?>' + periodParam;
-    new Ajax.Request(ajaxBlockUrl, {
-        parameters: {isAjax: 'true', form_key: FORM_KEY},
-        onSuccess: function(transport) {
-            tabContentElementId = 'dashboard_diagram_totals';
-            try {
-                if (transport.responseText.isJSON()) {
-                    var response = transport.responseText.evalJSON()
-                    if (response.error) {
-                        alert(response.message);
+            });
+            <?php endforeach; ?>
+            ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => 'totals', 'period' => '')) ?>' + periodParam;
+            new Ajax.Request(ajaxBlockUrl, {
+                parameters: {isAjax: 'true', form_key: FORM_KEY},
+                onSuccess: function (transport) {
+                    tabContentElementId = 'dashboard_diagram_totals';
+                    try {
+                        if (transport.responseText.isJSON()) {
+                            var response = transport.responseText.evalJSON()
+                            if (response.error) {
+                                alert(response.message);
+                            }
+                            if (response.ajaxExpired && response.ajaxRedirect) {
+                                setLocation(response.ajaxRedirect);
+                            }
+                        } else {
+                            $(tabContentElementId).replace(transport.responseText);
+                        }
                     }
-                    if(response.ajaxExpired && response.ajaxRedirect) {
-                        setLocation(response.ajaxRedirect);
+                    catch (e) {
+                        $(tabContentElementId).replace(transport.responseText);
                     }
-                } else {
-                    $(tabContentElementId).replace(transport.responseText);
                 }
-            }
-            catch (e) {
-                $(tabContentElementId).replace(transport.responseText);
-            }
+            });
         }
-    });
-}
 
-function toggleCal(id) {
-    $('dashboard_'+id+'_cal_div').toggle();
-    $('dashboard_'+id+'_range_div').toggle();
-}
-//]]>
-</script>
+        function toggleCal(id) {
+            $('dashboard_' + id + '_cal_div').toggle();
+            $('dashboard_' + id + '_range_div').toggle();
+        }
+        //]]>
+    </script>
 <?php endif; ?>
 <div class="content-header">
     <table cellspacing="0">
@@ -101,8 +101,10 @@ function toggleCal(id) {
         <div class="entry-edit-head"><h4><?php echo $this->__('Déclaration trismestrielle') ?></h4></div>
         <fieldset class="a-center bold">
             <span class="nowrap" style="font-size:15px;">
-                Prochaine déclaration trimestrielle dans <?php echo $this->helper('compta_invoice')->getDaysUntilNextDeclaration(); ?> jours (le
-                <?php echo $this->helper('core')->formatDate($this->helper('compta_invoice')->getNextDateDeclaration(), 'medium'); ?>)
+                Prochaine déclaration trimestrielle dans <?php echo $this->helper('compta_invoice')->getDaysUntilNextDeclaration(); ?>
+                jours (le
+                <?php echo $this->helper('core')->formatDate($this->helper('compta_invoice')->getNextDateDeclaration(), 'medium'); ?>
+                )
             </span>
         </fieldset>
     </div>
@@ -112,15 +114,25 @@ function toggleCal(id) {
 
     $monthsTrad = array(
         '1' => 'Janv.',
+        '01' => 'Janv.',
         '2' => 'Févr.',
+        '02' => 'Févr.',
         '3' => 'Mars',
+        '03' => 'Mars',
         '4' => 'Avr.',
+        '04' => 'Avr.',
         '5' => 'Mai',
+        '05' => 'Mai',
         '6' => 'Juin',
+        '06' => 'Juin',
         '7' => 'Juil.',
+        '07' => 'Juil.',
         '8' => 'Août',
+        '08' => 'Août',
         '9' => 'Sept.',
+        '09' => 'Sept.',
         '10' => 'Oct.',
+        '11' => 'Nov.',
         '11' => 'Novr.',
         '12' => 'Déc.'
     );
@@ -129,34 +141,38 @@ function toggleCal(id) {
     $nextRangeMonth[date('Y-m')] = date('Y-m');
     $beforeRangeMonth = array();
 
-    for($i = 1; $i<= 4; $i++) {
+    for ($i = 1; $i <= 9; $i++) {
         $nextMonthDate = date('Y-m', strtotime("+$i months", strtotime(date('Y-m') . '-01')));
         $nextRangeMonth[$nextMonthDate] = $nextMonthDate;
     }
 
 
-    for($i = 0; $i<= 3; $i++) {
+    for ($i = 0; $i <= 3; $i++) {
         $beforeMonthDate = date('Y-m', strtotime("-$i months", strtotime(date('Y-m') . '-01')));
         $beforeRangeMonth[$beforeMonthDate] = $beforeMonthDate;
     }
 
+    $totalRangeMonth = $beforeRangeMonth + $nextRangeMonth;
+    ksort($totalRangeMonth);
+
     $paidBeforeMonth = array();
 
-
-    foreach($beforeRangeMonth as $month) {
+    foreach ($beforeRangeMonth as $month) {
 
         $invoices = Mage::getModel('compta_invoice/invoice')->getCollection()
             ->addFieldToFilter('adjusted', 1)
-            ->addFieldToFilter('payment_date', array('like' => $month.'%'))
+            ->addFieldToFilter('payment_date', array('like' => $month . '%'))
             ->addFieldToSelect('*');
 
         $paidBeforeMonth[$month] = 0;
 
-        foreach($invoices as $invoice) {
+        foreach ($invoices as $invoice) {
             $paidBeforeMonth[$month] += $invoice->getAmount();
         }
 
     }
+    
+    ksort($paidBeforeMonth);
 
     ///////
 
@@ -172,40 +188,48 @@ function toggleCal(id) {
 
             $delayPaiement = $customer->getPaiementDelay();
             $yyyy_mm = substr($day, 0, 7);
+            //if($yyyy_mm >= date('Y-m')) { 
 
-            if(!isset($tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'])) {
+            if (!isset($tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'])) {
                 $tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'] = 0;
             }
-            $tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour']+=$nhour;
+            $tab[$yyyy_mm][$calendar->getCustomerId()]['nbhour'] += $nhour;
             $tab[$yyyy_mm][$calendar->getCustomerId()]['delay'] = $delayPaiement;
-
+//}
         }
     }
 
+    $foo = array();
 
     ksort($tab);
-    foreach($tab as $monthYYYYmm => $customerId) {
+    
+    
+    foreach ($tab as $monthYYYYmm => $customerId) {
 
-        foreach($customerId as $cId => $data) {
+        foreach ($customerId as $cId => $data) {
 
             $addDay = $data['delay'] ? $data['delay'] : "0";
 
             $nextMonthDate = date('Y-m', strtotime("+1 months +$addDay days", strtotime($monthYYYYmm . '-01')));
-            $customer = Mage::getModel('compta_customer/customer')->load($calendar->getCustomerId());
+            $customer = Mage::getModel('compta_customer/customer')->load($cId);
 
 
-            if(!isset($prevision[$nextMonthDate])) {
+            if (!isset($prevision[$nextMonthDate])) {
                 $prevision[$nextMonthDate] = 0;
             }
+
+            $foo[$customer->getNom()][$nextMonthDate] = $customer->getThm() * $data['nbhour'];
+
+            //if(($customer->getThm() * $data['nbhour']) == 5600) continue;
             $prevision[$nextMonthDate] += ($customer->getThm() * $data['nbhour']);
         }
 
 
     }
-
+    
     $paidAfterMonth = array();
-    foreach($nextRangeMonth as $yyyyMM) {
-        if(isset($prevision[$yyyyMM])) {
+    foreach ($totalRangeMonth as $yyyyMM) { //nexRangeMonth ?
+        if (isset($prevision[$yyyyMM])) {
             $paidAfterMonth[$yyyyMM] = $prevision[$yyyyMM];
         } else {
             $paidAfterMonth[$yyyyMM] = 0;
@@ -219,54 +243,99 @@ function toggleCal(id) {
     $totalMonths = array();
     $totalMonthsTrad = array();
 
-    foreach($paidBeforeMonth as $paidBeforeMonth => $amount) {
-        $year = (int) substr($paidBeforeMonth, 0, -2);
-        $month = (int) substr($paidBeforeMonth, 5, 7);
-        $beforeMonths[$year . '-' .$month] = $amount;
-        $totalMonths[] = $year . '-' .$month;
-        $totalMonthsTrad[$monthsTrad[$month] . ' ' .$year] = $monthsTrad[$month] . ' ' .$year;
+    foreach ($paidBeforeMonth as $paidBeforeMonth => $amount) {
+        $year = substr($paidBeforeMonth, 0, -3);
+        $month = substr($paidBeforeMonth, 5, 7);
+        $beforeMonths[$year . $month] = $amount;
+        $totalMonths[] = $year . $month;
+        $totalMonthsTrad[$monthsTrad[$month] . ' ' . $year] = $monthsTrad[$month] . ' ' . $year;
     }
 
-    foreach($paidAfterMonth as $paidAfterMonth => $amount) {
-        $year = (int) substr($paidAfterMonth, 0, -2);
-        $month = (int) substr($paidAfterMonth, 5, 7);
-        $afterMonths[$year . '-' .$month] = $amount;
-        $totalMonths[] = $year . '-' .$month;
-        $totalMonthsTrad[$monthsTrad[$month] . ' ' .$year] =  $monthsTrad[$month] . ' ' .$year;
+    foreach ($paidAfterMonth as $paidAfterMonth => $amount) {
+        $year = substr($paidAfterMonth, 0, -3);
+        $month = substr($paidAfterMonth, 5, 7);
+        $afterMonths[$year .  $month] = $amount;
+        $totalMonths[] = $year .  $month;
+        $totalMonthsTrad[$monthsTrad[$month] . ' ' . $year] = $monthsTrad[$month] . ' ' . $year;
     }
 
-    foreach($totalMonths as $tMonth) {
+    foreach ($totalMonths as $tMonth) {
 
-        if(!isset($beforeMonths[$tMonth])) {
+        if (!isset($beforeMonths[$tMonth])) {
             $beforeMonths[$tMonth] = 0;
         }
-        if(!isset($afterMonths[$tMonth])) {
+        if (!isset($afterMonths[$tMonth])) {
             $afterMonths[$tMonth] = 0;
         }
     }
 
+
+    // PRÉVISION DES MOIS PRÉCÉDENTS != FACTURÉS DES MOIS PRÉCÉDENTS
+
+    $retardMonths = array();
+
     ksort($beforeMonths);
     ksort($afterMonths);
+    
+    
+    $afterMonths2 = array();
+    foreach ($afterMonths as $yyyyMM => $amount) {
+        if ($yyyyMM < (string)date('Y-m')) {
+            $afterMonths2[$yyyyMM] = 0;
+            if (isset($beforeMonths[$yyyyMM])) {
+                if ($beforeMonths[$yyyyMM] !== $amount) {
+                    if (!isset($retardMonths[date('Y-m')])) {
+                        $retardMonths[date('Y-m')] = 0;
+                    }
+                    $retardMonths[date('Y-m')] += $amount;
+                }
+            }
+        } else {
+            $afterMonths2[$yyyyMM] = $amount;
+        }
+    }
 
-    $beforeMonthsNet = array();
-    $afterMonthsNet = array();
+    $afterMonths = $afterMonths2;
+    ksort($afterMonths);
 
-    foreach($beforeMonths as $k => $v) {
-        $beforeMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
+    foreach ($totalMonths as $tMonth) {
+
+        if (!isset($retardMonths[$tMonth])) {
+            $retardMonths[$tMonth] = 0;
+        }
     }
 
 
-    foreach($afterMonths as $k => $v) {
+    ksort($retardMonths);
+
+
+    $beforeMonthsNet = array();
+    $afterMonthsNet = array();
+    $retardMonthsNet = array();
+
+    foreach ($beforeMonths as $k => $v) {
+        $beforeMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
+    }
+    foreach ($afterMonths as $k => $v) {
         $afterMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
+    }
+    foreach ($retardMonths as $k => $v) {
+        $retardMonthsNet[$k] = $this->helper('compta_invoice')->toNet($v);
     }
 
     ?>
 
     <div style="padding-left:26px !important">
-        <button onclick="jQuery('#myChartNet').removeClass('no-display');jQuery('#myChart').addClass('no-display');">NET</button>
-        <button onclick="jQuery('#myChartNet').addClass('no-display');jQuery('#myChart').removeClass('no-display');">BRUT</button>
+        <button onclick="jQuery('#myChartNet').removeClass('no-display');jQuery('#myChart').addClass('no-display');">
+            NET
+        </button>
+        <button onclick="jQuery('#myChartNet').addClass('no-display');jQuery('#myChart').removeClass('no-display');">
+            BRUT
+        </button>
     </div>
-<style>.chart {width:82%}</style>
+    <style>.chart {
+            width: 82%
+        }</style>
     <div id="myChart" class="chart" style="min-height: 300px; margin: 0 auto"></div>
     <div id="myChartNet" class="chart no-display" style=" min-height: 300px; margin: 0 auto"></div>
 
@@ -326,12 +395,16 @@ function toggleCal(id) {
                 },
                 series: [{
                     name: 'Encaissé',
-                    color : "#A1D490",
+                    color: "#A1D490",
                     data: [<?php echo implode(',', array_values($beforeMonths)); ?>]
                 }, {
                     name: 'Prévision',
                     color: "#F0E171",
                     data: [<?php echo implode(',', array_values($afterMonths)); ?>]
+                }, {
+                    name: 'Retard',
+                    color: "#D49091",
+                    data: [<?php echo implode(',', array_values($retardMonths)); ?>]
                 }]
             });
             jQuery('#myChartNet').highcharts({
@@ -387,18 +460,22 @@ function toggleCal(id) {
                 },
                 series: [{
                     name: 'Encaissé',
-                    color : "#A1D490",
+                    color: "#A1D490",
                     data: [<?php echo implode(',', array_values($beforeMonthsNet)); ?>]
                 }, {
                     name: 'Prévision',
                     color: "#F0E171",
                     data: [<?php echo implode(',', array_values($afterMonthsNet)); ?>]
 
+                }, {
+                    name: 'Retard',
+                    color: "#D49091",
+                    data: [<?php echo implode(',', array_values($retardMonthsNet)); ?>]
+
                 }]
             });
         });
     </script>
-
 
 
     <?php echo $this->getChildHtml('store_switcher') ?>
@@ -415,7 +492,8 @@ function toggleCal(id) {
                 </div>
 
                 <div class="entry-edit">
-                    <div class="entry-edit-head"><h4><?php echo $this->__("Chiffre d'affaires ces derniers mois") ?></h4></div>
+                    <div class="entry-edit-head">
+                        <h4><?php echo $this->__("Chiffre d'affaires ces derniers mois") ?></h4></div>
                     <fieldset class="np"><?php echo $this->getChildHtml('lastMonth'); ?></fieldset>
                 </div>
             </td>

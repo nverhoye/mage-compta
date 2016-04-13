@@ -64,7 +64,7 @@ class Mage_Adminhtml_Block_Dashboard_Sales extends Mage_Adminhtml_Block_Dashboar
         $collection->load();
         $sales = $collection->getFirstItem();
 
-        $this->addTotal($this->__("Ventes depuis le début d'activité (Brut)"), $this->_getSalesLifetime());
+        $this->addTotal($this->__("Ventes (CA brut) depuis le début d'année (plafond : 32 600 euros)"), $this->_getSalesLifetime());
         $this->addTotal($this->__('Moyenne des prestations (Brut)'), $this->_getSalesAverage());
     }
 
@@ -74,7 +74,8 @@ class Mage_Adminhtml_Block_Dashboard_Sales extends Mage_Adminhtml_Block_Dashboar
         $invoices = Mage::getModel('compta_invoice/invoice')
             ->getCollection()
             ->addFieldToSelect('amount')
-            ->addFieldToFilter('adjusted', 1);
+            ->addFieldToFilter('adjusted', 1)
+            ->addFieldToFilter('payment_date', array('like' => date('Y').'-%'));
         $total = 0;
         foreach ($invoices as $invoice) {
             $total += $invoice->getAmount();
